@@ -1,6 +1,5 @@
 import Symptom from './Symptom';
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
 
 interface SymptomData {
     id: number;
@@ -23,14 +22,14 @@ const SymptomGroup = ({ searchKey, onSelectItem }: Props) => {
                 body: JSON.stringify({"search_key": searchKey})
             };
 
-            fetch('http://127.0.0.1:5000/symptomsearch', requestOptions)
+            fetch('https://disease-predictor.azurewebsites.net/symptomsearch', requestOptions)
                 .then(res => res.json())
                 .then((data: SymptomData[]) => {
                     setData(data);
                 })
                 .catch(error => console.error('Error:', error));
         } else {
-            fetch("http://127.0.0.1:5000//symptoms")
+            fetch("https://disease-predictor.azurewebsites.net//symptoms")
                 .then(res => res.json())
                 .then((data: SymptomData[]) => {
                     setData(data);
@@ -44,11 +43,14 @@ const SymptomGroup = ({ searchKey, onSelectItem }: Props) => {
     };
 
     return (
-        <div className="symptom-group">
-            {data.map(s => (
-                <Symptom key={s.id} onSelectItem={handleSelectedItem} id={s.id} name={s.symptom} />
-            ))}
-        </div>
+        <>
+            {data.length == 0 && <div className="loading">Loading&#8230;</div>}
+            <div className="symptom-group">
+                {data.map(s => (
+                    <Symptom key={s.id} onSelectItem={handleSelectedItem} id={s.id} name={s.symptom} />
+                ))}
+            </div>
+        </>
     );
 };
 

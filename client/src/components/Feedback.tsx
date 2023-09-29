@@ -36,7 +36,7 @@ function Feedback() {
     e.preventDefault();
     // Make a POST request with formData
     console.log(formData);
-    fetch('http://127.0.0.1:5000/feedback', {
+    fetch('https://disease-predictor.azurewebsites.net/feedback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -192,3 +192,7 @@
 .feedback-form-control {
   margin-bottom: 15px;
 }
+
+.navbar-toggler {
+  background-color: #5C6C76;
+}

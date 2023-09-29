@@ -53,7 +53,7 @@ const Home = () => {
       body: JSON.stringify(idList)
     };
     
-    fetch('http://127.0.0.1:5000/predict', requestOptions)
+    fetch('https://disease-predictor.azurewebsites.net/predict', requestOptions)
       .then(response => response.json())
       .then((predictionResults:PredictionResults[]) => {
         setPredictionResults(predictionResults);

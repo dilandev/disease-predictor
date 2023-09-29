@@ -24,7 +24,7 @@ function MedicalCenter() {
                 body: JSON.stringify({ lat: latitude, lng: longitude })  // Send the user's location to the server
                 };
 
-                fetch('http://127.0.0.1:5000/medicalcenters', requestOptions)
+                fetch('https://disease-predictor.azurewebsites.net/medicalcenters', requestOptions)
                 .then(res => res.json())
                 .then((serverData: LocationData[]) => {
                     setData(serverData);
@@ -39,9 +39,7 @@ function MedicalCenter() {
 
     return (
         <>
-        {data.length == 0 && <div className="loading">Loading&#8230;</div>
-
-        }
+        {data.length == 0 && <div className="loading">Loading&#8230;</div>}
         <div className="container section fade-in-element">
             <div className="row">
                 <div className="col-md-12">
