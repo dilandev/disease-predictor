@@ -44,7 +44,7 @@ const SymptomGroup = ({ searchKey, onSelectItem }: Props) => {
 
     return (
         <>
-            {data.length == 0 && <div className="loading">Loading&#8230;</div>}
+            {searchKey.length == 0 && data.length == 0 && <div className="loading">Loading&#8230;</div>}
             <div className="symptom-group">
                 {data.map(s => (
                     <Symptom key={s.id} onSelectItem={handleSelectedItem} id={s.id} name={s.symptom} />

@@ -16,6 +16,7 @@ function Feedback() {
     message: '',
     rating: 5,
   });
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -44,7 +45,10 @@ function Feedback() {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        response.json()
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
       })
       .then((data) => {
         // Reset form after successful submission
@@ -55,16 +59,29 @@ function Feedback() {
           rating: 5,
         });
         setHover(null);  // Reset hover state
+  
+        // Update success message
+        setSuccessMessage('Feedback submitted successfully!');
+  
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 3000);
       })
       .catch((error) => {
         console.error('Error submitting feedback:', error);
+  
+        // Update error message if needed
+        setSuccessMessage('Error submitting feedback. Please try again.');
       });
-  };
+  };  
 
   return (
     <div className="container section">
       <div className="row">
         <div className="col-md-6">
+          {/* Display success message */}
+          {successMessage && <div className="alert alert-success">{successMessage}</div>}
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <p>Got any suggestions or feedback? Help us improve💡</p>
