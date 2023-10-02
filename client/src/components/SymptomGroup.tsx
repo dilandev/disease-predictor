@@ -1,5 +1,6 @@
 import Symptom from './Symptom';
 import React, { useState, useEffect } from 'react'
+import { API_ENDPOINTS } from '../apiConfig';
 
 interface SymptomData {
     id: number;
@@ -22,14 +23,14 @@ const SymptomGroup = ({ searchKey, onSelectItem }: Props) => {
                 body: JSON.stringify({"search_key": searchKey})
             };
 
-            fetch('https://disease-predictor.azurewebsites.net/symptomsearch', requestOptions)
+            fetch(API_ENDPOINTS.SYMPTOM_SEARCH, requestOptions)
                 .then(res => res.json())
                 .then((data: SymptomData[]) => {
                     setData(data);
                 })
                 .catch(error => console.error('Error:', error));
         } else {
-            fetch("https://disease-predictor.azurewebsites.net//symptoms")
+            fetch(API_ENDPOINTS.SYMPTOMS)
                 .then(res => res.json())
                 .then((data: SymptomData[]) => {
                     setData(data);

@@ -1,5 +1,6 @@
 import { FaStar } from 'react-icons/fa';
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { API_ENDPOINTS } from '../apiConfig';
 
 interface FormData {
   name: string;
@@ -37,7 +38,7 @@ function Feedback() {
     e.preventDefault();
     // Make a POST request with formData
     console.log(formData);
-    fetch('https://disease-predictor.azurewebsites.net/feedback', {
+    fetch(API_ENDPOINTS.FEEDBACK, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

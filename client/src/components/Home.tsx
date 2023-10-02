@@ -3,6 +3,7 @@ import SelectedSymptomGroup from "./SelectedSymptomGroup";
 import PredictionResult from "./PredictionResult";
 import { useState, useEffect, useRef } from "react";
 import { ChangeEvent } from "react";
+import { API_ENDPOINTS } from '../apiConfig';
 
 interface PredictionResults {
   disease: string,
@@ -53,7 +54,7 @@ const Home = () => {
       body: JSON.stringify(idList)
     };
     
-    fetch('https://disease-predictor.azurewebsites.net/predict', requestOptions)
+    fetch(API_ENDPOINTS.PREDICT, requestOptions)
       .then(response => response.json())
       .then((predictionResults:PredictionResults[]) => {
         setPredictionResults(predictionResults);

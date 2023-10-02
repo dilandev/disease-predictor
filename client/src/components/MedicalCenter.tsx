@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import logoImage from '../assets/diagnosage-logo.png';
+import { API_ENDPOINTS } from '../apiConfig';
 
 interface LocationData {
     address: string;
@@ -24,7 +25,7 @@ function MedicalCenter() {
                 body: JSON.stringify({ lat: latitude, lng: longitude })  // Send the user's location to the server
                 };
 
-                fetch('https://disease-predictor.azurewebsites.net/medicalcenters', requestOptions)
+                fetch(API_ENDPOINTS.MEDICAL_CENTERS, requestOptions)
                 .then(res => res.json())
                 .then((serverData: LocationData[]) => {
                     setData(serverData);
