@@ -19,12 +19,13 @@ function MedicalCenter() {
     const [userLocation, setUserLocation] = useState<UserLocation>({latitude: 6.975553712782505, longitude: 79.91551871164292});
     const [locationAccessGranted, setLocationAccessGranted] = useState<boolean>(false);
 
-    const handleGrantAccess = () => {
+    const promptGrantAccess = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
     
+                setMedicalCenter([]);
                 setUserLocation({ latitude, longitude });
                 setLocationAccessGranted(true);
             }, (error) => {
@@ -48,7 +49,7 @@ function MedicalCenter() {
             setMedicalCenter(serverData); // Update state with medicalCenter received from the server
         })
         .catch(error => console.error('Error:', error));
-    }, []);
+    }, [userLocation, locationAccessGranted]);
 
     return (
         <>
@@ -60,7 +61,7 @@ function MedicalCenter() {
                         <div className="location-access-message mb-2">
                             <span>Location access is required to show nearby medical centers. Grant access?</span>
                             <span>&nbsp;&nbsp;</span>
-                            <button type="button" onClick={handleGrantAccess} className="btn btn-success">
+                            <button type="button" onClick={promptGrantAccess} className="btn btn-success">
                                 <span>&nbsp;</span>
                                 <span>&nbsp;</span>Grant Access<span>&nbsp;</span>
                                 <span>&nbsp;</span>
