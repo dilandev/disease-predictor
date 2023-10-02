@@ -2,50 +2,73 @@ import { useState, useEffect } from "react";
 import logoImage from '../assets/diagnosage-logo.png';
 import { API_ENDPOINTS } from '../apiConfig';
 
-interface LocationData {
+interface MedicalCenterData {
     address: string;
     name: string;
     icon: string;
     url: string;
 }
+
+interface UserLocation {
+    latitude: number;
+    longitude: number;
+}
   
 function MedicalCenter() {
-    const initialData: LocationData[] = [];
-    const [data, setData] = useState<LocationData[]>(initialData);
+    const [medicalCenter, setMedicalCenter] = useState<MedicalCenterData[]>([]);
+    const [userLocation, setUserLocation] = useState<UserLocation>({latitude: 6.975553712782505, longitude: 79.91551871164292});
+    const [locationAccessGranted, setLocationAccessGranted] = useState<boolean>(false);
 
-    useEffect(() => {
+    const handleGrantAccess = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                const latitude = position.coords.latitude || 6.975553712782505;
-                const longitude = position.coords.longitude || 79.91551871164292;
-
-                const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lat: latitude, lng: longitude })  // Send the user's location to the server
-                };
-
-                fetch(API_ENDPOINTS.MEDICAL_CENTERS, requestOptions)
-                .then(res => res.json())
-                .then((serverData: LocationData[]) => {
-                    setData(serverData);
-                    console.log(serverData)  // Update state with data received from the server
-                })
-                .catch(error => console.error('Error:', error));
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+    
+                setUserLocation({ latitude, longitude });
+                setLocationAccessGranted(true);
+            }, (error) => {
+                alert("Error getting location: " + error.message);
             });
         } else {
             alert("Geolocation is not supported by this browser.");
         }
+    }    
+    
+    useEffect(() => {
+        const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat: userLocation.latitude, lng: userLocation.longitude })  // Send the user's location to the server
+        };
+
+        fetch(API_ENDPOINTS.MEDICAL_CENTERS, requestOptions)
+        .then(res => res.json())
+        .then((serverData: MedicalCenterData[]) => {
+            setMedicalCenter(serverData); // Update state with medicalCenter received from the server
+        })
+        .catch(error => console.error('Error:', error));
     }, []);
 
     return (
         <>
-        {data.length == 0 && <div className="loading">Loading&#8230;</div>}
+        {medicalCenter.length == 0 && <div className="loading">Loading&#8230;</div>}
         <div className="container section fade-in-element">
             <div className="row">
                 <div className="col-md-12">
+                    {!locationAccessGranted &&
+                        <div className="location-access-message mb-2">
+                            <span>Location access is required to show nearby medical centers. Grant access?</span>
+                            <span>&nbsp;&nbsp;</span>
+                            <button type="button" onClick={handleGrantAccess} className="btn btn-success">
+                                <span>&nbsp;</span>
+                                <span>&nbsp;</span>Grant Access<span>&nbsp;</span>
+                                <span>&nbsp;</span>
+                            </button>
+                        </div>
+                    }
                     <ul className="list-group list-group-light">
-                        {data.map(l => (
+                        {medicalCenter.map(l => (
                             <li className="list-group-item d-flex justify-content-between align-items-center">
                                 <div className="d-flex align-items-center">
                                     <img

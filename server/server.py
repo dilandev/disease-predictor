@@ -106,8 +106,8 @@ def getNearbyMedicalCenters():
     request_data = request.get_json()
 
     if 'lat' and 'lng' in request_data:
-        lat = request_data.get('lat', 6.975553712782505)
-        lng = request_data.get('lng', 79.91551871164292)
+        lat = request_data.get('lat')
+        lng = request_data.get('lng')
         location = {'lat': lat, 'lng': lng}
         search_string = 'ayurveda'
         distance = miles_to_meter(10)
